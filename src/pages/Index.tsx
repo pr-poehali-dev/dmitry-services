@@ -1,9 +1,104 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
+function OrderForm() {
+  const [form, setForm] = useState({ name: "", phone: "", service: "", comment: "" });
+  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "err">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.phone) return;
+    setStatus("sending");
+    await new Promise(r => setTimeout(r, 600));
+    setStatus("ok");
+  };
+
+  if (status === "ok") {
+    return (
+      <div className="border border-amber-400/30 bg-amber-400/5 p-12 text-center">
+        <div className="w-14 h-14 border border-amber-400 flex items-center justify-center mx-auto mb-6">
+          <Icon name="CheckCheck" size={24} className="text-amber-400" />
+        </div>
+        <h3 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-2xl uppercase tracking-wide mb-2">Заявка принята!</h3>
+        <p className="text-white/50 text-sm">Дмитрий свяжется с вами в течение часа.</p>
+        <p className="text-white/30 text-sm mt-1">Или звоните сразу: <a href="tel:89935039859" className="text-amber-400 hover:underline">8 (993) 503-98-59</a></p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-4">
+      <div className="space-y-1">
+        <label className="text-xs uppercase tracking-widest text-white/40">Ваше имя *</label>
+        <input
+          type="text"
+          required
+          value={form.name}
+          onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+          placeholder="Иван Иванов"
+          className="w-full bg-[#141414] border border-white/15 text-white px-4 py-3 text-sm placeholder:text-white/20 focus:outline-none focus:border-amber-400/50 transition-colors"
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="text-xs uppercase tracking-widest text-white/40">Телефон *</label>
+        <input
+          type="tel"
+          required
+          value={form.phone}
+          onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+          placeholder="+7 (___) ___-__-__"
+          className="w-full bg-[#141414] border border-white/15 text-white px-4 py-3 text-sm placeholder:text-white/20 focus:outline-none focus:border-amber-400/50 transition-colors"
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="text-xs uppercase tracking-widest text-white/40">Услуга</label>
+        <select
+          value={form.service}
+          onChange={e => setForm(f => ({ ...f, service: e.target.value }))}
+          className="w-full bg-[#141414] border border-white/15 text-white px-4 py-3 text-sm focus:outline-none focus:border-amber-400/50 transition-colors appearance-none"
+        >
+          <option value="">Выберите услугу</option>
+          <option value="paint">Покраска краскопультом</option>
+          <option value="mow">Покос травы / спил дерева</option>
+          <option value="demo">Демонтаж / расчистка</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+      <div className="space-y-1">
+        <label className="text-xs uppercase tracking-widest text-white/40">Комментарий</label>
+        <input
+          type="text"
+          value={form.comment}
+          onChange={e => setForm(f => ({ ...f, comment: e.target.value }))}
+          placeholder="Опишите объект или задачу"
+          className="w-full bg-[#141414] border border-white/15 text-white px-4 py-3 text-sm placeholder:text-white/20 focus:outline-none focus:border-amber-400/50 transition-colors"
+        />
+      </div>
+      <div className="md:col-span-2 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          className="bg-amber-400 text-black font-semibold px-10 py-3.5 uppercase tracking-widest hover:bg-amber-300 transition-colors text-sm disabled:opacity-60"
+          style={{ fontFamily: "'Oswald', sans-serif" }}
+        >
+          {status === "sending" ? "Отправляю..." : "Отправить заявку"}
+        </button>
+        <p className="text-white/25 text-xs leading-relaxed">
+          Нажимая кнопку, вы соглашаетесь на обработку персональных данных.<br />
+          Звоните напрямую: <a href="tel:89935039859" className="text-white/40 hover:text-amber-400 transition-colors">8 (993) 503-98-59</a>
+        </p>
+      </div>
+    </form>
+  );
+}
+
 const PAINT_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/files/efe4d559-d6c3-40d2-bfb4-e5bb1eaa9c23.jpg";
-const DEMO_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/files/5b57d6d0-966d-4dd4-bc5a-34c415549ff2.jpg";
-const MOWING_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/files/8c93df10-4450-4e23-a561-e9313f255c57.jpg";
+const BYTOVKA_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/57f8369a-1eff-47e2-bb04-620a8c7553e4.png";
+const DEMO_BEFORE_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/0decc7d1-26f1-4681-869e-81e50b84d16f.png";
+const DEMO_WORK1_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/736f0c9b-3e59-4e5e-8676-e39b4150f956.jpg";
+const DEMO_WORK2_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/67ce76e2-95fd-45bf-ab03-60af1287ae8d.jpg";
+const DEMO_WORK3_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/a8216a42-ab33-4e6c-94ee-6a10610bbd80.jpg";
+const SPRAVKA_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/57f8369a-1eff-47e2-bb04-620a8c7553e4.png";
 
 const NAV_LINKS = [
   { label: "Услуги", href: "#services" },
@@ -11,6 +106,7 @@ const NAV_LINKS = [
   { label: "Цены", href: "#prices" },
   { label: "Отзывы", href: "#reviews" },
   { label: "FAQ", href: "#faq" },
+  { label: "Документы", href: "#documents" },
   { label: "Контакты", href: "#contacts" },
 ];
 
@@ -77,9 +173,11 @@ const PRICE_SECTIONS = [
 ];
 
 const PORTFOLIO = [
-  { img: PAINT_IMG, title: "Покраска ограждений", desc: "Забор, ворота, навесы — краскопультом за 1 день" },
-  { img: DEMO_IMG, title: "Демонтаж после пожара", desc: "Разбор сгоревшей бани, расчистка территории — 3 дня" },
-  { img: MOWING_IMG, title: "Покос участка", desc: "Запущенный газон приведён в порядок за полдня" },
+  { img: BYTOVKA_IMG, title: "Покраска бытовки", desc: "Полный цикл: очистка, грунт, покраска. Итог — как новая." },
+  { img: DEMO_BEFORE_IMG, title: "До демонтажа", desc: "Сгоревшая баня — брёвна, гарь, мусор. Так это выглядело в начале." },
+  { img: DEMO_WORK1_IMG, title: "В процессе расчистки", desc: "Очистили площадку от золы, гвоздей и остатков конструкций." },
+  { img: DEMO_WORK2_IMG, title: "Демонтаж конструкций", desc: "Разбор перекрытий и стен. Сортировка и складирование." },
+  { img: DEMO_WORK3_IMG, title: "Команда на объекте", desc: "Работаем быстро и аккуратно. Три дня — и площадка чистая." },
 ];
 
 const REVIEWS = [
@@ -286,18 +384,18 @@ export default function Index() {
             </div>
             <h2 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-4xl md:text-5xl font-bold uppercase tracking-tight">Портфолио</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {PORTFOLIO.map((p) => (
-              <div key={p.title} className="group overflow-hidden">
-                <div className="overflow-hidden aspect-[4/3] mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {PORTFOLIO.map((p, i) => (
+              <div key={p.title} className={`group overflow-hidden ${i === 0 ? "col-span-2 md:col-span-1" : ""}`}>
+                <div className="overflow-hidden aspect-[4/3] mb-3">
                   <img
                     src={p.img}
                     alt={p.title}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                   />
                 </div>
-                <h3 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-lg font-semibold uppercase tracking-wide mb-1">{p.title}</h3>
-                <p className="text-white/50 text-sm font-light">{p.desc}</p>
+                <h3 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-sm md:text-base font-semibold uppercase tracking-wide mb-1">{p.title}</h3>
+                <p className="text-white/50 text-xs md:text-sm font-light">{p.desc}</p>
               </div>
             ))}
           </div>
@@ -507,6 +605,106 @@ export default function Index() {
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* DOCUMENTS */}
+      <section id="documents" className="py-24 bg-[#141414]">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="mb-14">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-0.5 bg-amber-400" />
+              <span className="text-amber-400 text-xs uppercase tracking-[0.3em]">Прозрачность и доверие</span>
+            </div>
+            <h2 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-4xl md:text-5xl font-bold uppercase tracking-tight">Документы</h2>
+            <p className="text-white/40 text-sm mt-2">Работаю официально. Все документы — по запросу или в сообществе ВКонтакте</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Справка самозанятого */}
+            <div className="border border-white/10 p-6 hover:border-amber-400/30 transition-colors">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-10 h-10 border border-amber-400/40 flex items-center justify-center shrink-0">
+                  <Icon name="FileCheck" size={18} className="text-amber-400" />
+                </div>
+                <div>
+                  <h3 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-base uppercase tracking-wide mb-1">Справка о самозанятости</h3>
+                  <p className="text-white/40 text-sm">ФНС России · ИНН 661914015077 · актуальная</p>
+                </div>
+              </div>
+              <div className="relative overflow-hidden rounded-sm group cursor-pointer">
+                <img
+                  src="https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/57f8369a-1eff-47e2-bb04-620a8c7553e4.png"
+                  alt="Справка самозанятого"
+                  className="w-full opacity-60 group-hover:opacity-80 transition-opacity"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-colors">
+                  <a
+                    href="https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/57f8369a-1eff-47e2-bb04-620a8c7553e4.png"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 bg-amber-400 text-black font-semibold px-5 py-2.5 text-sm uppercase tracking-widest hover:bg-amber-300 transition-colors"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}
+                  >
+                    <Icon name="ZoomIn" size={14} />
+                    Открыть
+                  </a>
+                </div>
+              </div>
+            </div>
+            {/* Лист осмотра */}
+            <div className="border border-white/10 p-6 hover:border-amber-400/30 transition-colors">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-10 h-10 border border-amber-400/40 flex items-center justify-center shrink-0">
+                  <Icon name="ClipboardList" size={18} className="text-amber-400" />
+                </div>
+                <div>
+                  <h3 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-base uppercase tracking-wide mb-1">Лист осмотра объекта</h3>
+                  <p className="text-white/40 text-sm">Заполняется на бесплатном выезде · 2026</p>
+                </div>
+              </div>
+              <div className="border border-white/10 bg-[#0f0f0f] p-5 text-sm space-y-3">
+                {[
+                  "Дата и адрес объекта",
+                  "Виды работ с отметками (покраска, антисептик, грунт и др.)",
+                  "Характеристики: площадь, высота, материал, состояние стен",
+                  "Материалы: что использует мастер / заказчик",
+                  "Смета по видам работ",
+                  "Сроки, гарантия 12 месяцев",
+                  "Подписи мастера и заказчика",
+                ].map((line, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="text-amber-400 shrink-0 mt-0.5">—</span>
+                    <span className="text-white/50">{line}</span>
+                  </div>
+                ))}
+                <div className="pt-3 border-t border-white/10">
+                  <a
+                    href="tel:89935039859"
+                    className="inline-flex items-center gap-2 text-amber-400 text-sm hover:text-amber-300 transition-colors"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}
+                  >
+                    <Icon name="Phone" size={13} />
+                    Получить при выезде на осмотр
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ORDER FORM */}
+      <section id="order" className="py-24 bg-[#0f0f0f]">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="mb-14">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-0.5 bg-amber-400" />
+              <span className="text-amber-400 text-xs uppercase tracking-[0.3em]">Бесплатно</span>
+            </div>
+            <h2 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-4xl md:text-5xl font-bold uppercase tracking-tight">Оставить заявку</h2>
+            <p className="text-white/40 text-sm mt-2">Свяжусь в течение часа. Приеду на осмотр — и назову точную цену.</p>
+          </div>
+          <OrderForm />
         </div>
       </section>
 
