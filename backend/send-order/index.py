@@ -1,10 +1,10 @@
 """
-Отправляет заявку с сайта через СМС на номер Дмитрия (sms.ru).
+Отправляет заявку с сайта на email владельца через Gmail SMTP.
 """
 import json
 import os
-import urllib.request
-import urllib.parse
+import smtplib
+from email.mime.text import MIMEText
 
 
 def handler(event: dict, context) -> dict:
@@ -30,33 +30,20 @@ def handler(event: dict, context) -> dict:
     if not name or not phone:
         return {"statusCode": 400, "headers": cors_headers, "body": json.dumps({"error": "name and phone required"})}
 
-    sms_text = f"Заявка: {name}, тел {phone}"
-    if service:
-        sms_text += f", {service}"
-    if comment:
-        sms_text += f". {comment}"
+    text = f"Новая заявка с сайта\n\nИмя: {name}\nТелефон: {phone}\nУслуга: {service or '—'}\nКомментарий: {comment or '—'}"
 
-    api_key = os.environ.get("SMSRU_API_KEY", "")
-    to_phone = "89935039859"
+    smtp_password = os.environ.get("SMTP_PASSWORD", "")
+    from_email = "d17223012@gmail.com"
+    to_email = "d17223012@gmail.com"
 
-    params = urllib.parse.urlencode({
-        "api_id": api_key,
-        "to": to_phone,
-        "msg": sms_text,
-        "json": 1,
-    })
+    msg = MIMEText(text, "plain", "utf-8")
+    msg["Subject"] = f"Заявка с сайта: {name}"
+    msg["From"] = from_email
+    msg["To"] = to_email
 
-    url = f"https://sms.ru/sms/send?{params}"
-
-    try:
-        req = urllib.request.Request(url, method="GET")
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            result = json.loads(resp.read())
-            status = result.get("status")
-            if status != "OK":
-                return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": f"sms.ru: {status}", "detail": result})}
-    except Exception as e:
-        return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": str(e)})}
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        smtp.login(from_email, smtp_password)
+        smtp.send_message(msg)
 
     return {
         "statusCode": 200,
