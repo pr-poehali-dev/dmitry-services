@@ -105,8 +105,20 @@ export default function OrderForm() {
     e.preventDefault();
     if (!name || !phone) return;
     setStatus("sending");
-    await new Promise(r => setTimeout(r, 600));
-    setStatus("ok");
+    try {
+      const res = await fetch("https://functions.poehali.dev/1886b467-c239-4908-b82b-a9950d7dd0cc", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, callTime, paint, paintOther, mow, demo, demoOther, other, volume, conditions }),
+      });
+      if (res.ok) {
+        setStatus("ok");
+      } else {
+        setStatus("err");
+      }
+    } catch {
+      setStatus("err");
+    }
   };
 
   if (status === "ok") {
@@ -213,6 +225,11 @@ export default function OrderForm() {
       </div>
 
       {/* Кнопка */}
+      {status === "err" && (
+        <p className="text-red-400 text-sm border border-red-400/30 bg-red-400/5 px-4 py-3">
+          Не удалось отправить заявку. Позвоните напрямую: <a href="tel:89935039859" className="underline">8 (993) 503-98-59</a>
+        </p>
+      )}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
         <button
           type="submit"
