@@ -32,7 +32,16 @@ const SERVICES = [
   },
 ];
 
+const SAUNA_START_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/bdc32bcb-405a-494f-bcf3-dae5187fb4c5.png";
+const SAUNA_WALLS_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/484071d7-bcd5-4e87-8e94-8d3ee6707562.png";
+const SAUNA_ROOF_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/0c4e0c16-f22e-4412-9957-ba5e95419a93.png";
+const MOWING_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/4581cdf5-1a33-48a6-84a3-b63b5a934d2f.png";
+
 const PORTFOLIO = [
+  { img: MOWING_IMG, title: "Покос травы — 2025", desc: "Убираем заросли триммером. Быстро, аккуратно, без проплешин.", tag: "2025" },
+  { img: SAUNA_START_IMG, title: "Постройка бани — начало", desc: "Подготовка брёвен и закладка первых венцов. Июль 2025.", tag: "2025" },
+  { img: SAUNA_WALLS_IMG, title: "Постройка бани — стены", desc: "Сруб растёт — венцы уложены, углы подогнаны.", tag: "2025" },
+  { img: SAUNA_ROOF_IMG, title: "Постройка бани — крыша", desc: "Стропила, обрешётка, кровля. Баня уже под крышей.", tag: "2025" },
   { img: BYTOVKA_IMG, title: "Покраска бытовки", desc: "Полный цикл: очистка, грунт, покраска. Итог — как новая." },
   { img: DEMO_BEFORE_IMG, title: "До демонтажа", desc: "Сгоревшая баня — брёвна, гарь, мусор. Так это выглядело в начале." },
   { img: DEMO_WORK1_IMG, title: "В процессе расчистки", desc: "Очистили площадку от золы, гвоздей и остатков конструкций." },
@@ -167,12 +176,17 @@ export default function Index() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {PORTFOLIO.map((p, i) => (
               <div key={p.title} className={`group overflow-hidden ${i === 0 ? "col-span-2 md:col-span-1" : ""}`}>
-                <div className="overflow-hidden aspect-[4/3] mb-3">
+                <div className="relative overflow-hidden aspect-[4/3] mb-3">
                   <img
                     src={p.img}
                     alt={p.title}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                   />
+                  {p.tag && (
+                    <span className="absolute top-2 left-2 bg-amber-400 text-black text-[10px] font-bold uppercase px-2 py-0.5 tracking-widest">
+                      {p.tag}
+                    </span>
+                  )}
                 </div>
                 <h3 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-sm md:text-base font-semibold uppercase tracking-wide mb-1">{p.title}</h3>
                 <p className="text-white/50 text-xs md:text-sm font-light">{p.desc}</p>
