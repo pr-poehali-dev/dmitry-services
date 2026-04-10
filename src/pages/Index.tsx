@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import Navbar from "@/components/Navbar";
-import OrderForm from "@/components/OrderForm";
 import PricesSection from "@/components/PricesSection";
 import FaqSection from "@/components/FaqSection";
 
@@ -449,18 +448,25 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ORDER FORM */}
-      <section id="order" className="py-24 bg-[#0f0f0f]">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="mb-14">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-0.5 bg-amber-400" />
-              <span className="text-amber-400 text-xs uppercase tracking-[0.3em]">Бесплатно</span>
-            </div>
-            <h2 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-4xl md:text-5xl font-bold uppercase tracking-tight">Оставить заявку</h2>
-            <p className="text-white/40 text-sm mt-2">Свяжусь в течение часа. Приеду на осмотр — и назову точную цену.</p>
+      {/* CONTACTS */}
+      <section id="contacts" className="py-24 bg-[#0f0f0f]">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="w-8 h-0.5 bg-amber-400" />
+            <span className="text-amber-400 text-xs uppercase tracking-[0.3em]">Бесплатно</span>
+            <div className="w-8 h-0.5 bg-amber-400" />
           </div>
-          <OrderForm />
+          <h2 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-4xl md:text-5xl font-bold uppercase tracking-tight mb-4">Позвоните мне</h2>
+          <p className="text-white/40 text-sm mb-10">Свяжусь в течение часа. Приеду на осмотр — и назову точную цену.</p>
+          <a
+            href="tel:89935039859"
+            className="inline-flex items-center gap-4 bg-amber-400 text-black font-bold px-10 py-5 uppercase tracking-widest hover:bg-amber-300 transition-colors text-xl"
+            style={{ fontFamily: "'Oswald', sans-serif" }}
+          >
+            <Icon name="Phone" size={24} />
+            8 (993) 503-98-59
+          </a>
+          <p className="text-white/25 text-xs mt-6">Звонки принимаю ежедневно с 8:00 до 21:00</p>
         </div>
       </section>
 
