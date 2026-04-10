@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import Navbar from "@/components/Navbar";
 import OrderForm from "@/components/OrderForm";
@@ -39,18 +40,54 @@ const MOWING_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e
 const MOWING2_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/cb63b0b8-9dcf-4322-85f2-9724ab230938.png";
 const MOWING3_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/b9214817-e15f-46bb-a8e6-e35e5252cb53.png";
 
-const PORTFOLIO = [
-  { img: MOWING_IMG, title: "Покос травы — 2025", desc: "Убираем заросли триммером. Быстро, аккуратно, без проплешин.", tag: "2025" },
-  { img: MOWING2_IMG, title: "Покос двора — 2025", desc: "Облагородили двор жилого дома. Триммер, уборка, порядок.", tag: "2025" },
-  { img: MOWING3_IMG, title: "Расчистка участка — 2025", desc: "Заросший участок под дачу. До и после — небо и земля.", tag: "2025" },
-  { img: SAUNA_START_IMG, title: "Постройка бани — начало", desc: "Подготовка брёвен и закладка первых венцов. Июль 2025.", tag: "2025" },
-  { img: SAUNA_WALLS_IMG, title: "Постройка бани — стены", desc: "Сруб растёт — венцы уложены, углы подогнаны.", tag: "2025" },
-  { img: SAUNA_ROOF_IMG, title: "Постройка бани — крыша", desc: "Стропила, обрешётка, кровля. Баня уже под крышей.", tag: "2025" },
-  { img: BYTOVKA_IMG, title: "Покраска бытовки", desc: "Полный цикл: очистка, грунт, покраска. Итог — как новая." },
-  { img: DEMO_BEFORE_IMG, title: "До демонтажа", desc: "Сгоревшая баня — брёвна, гарь, мусор. Так это выглядело в начале." },
-  { img: DEMO_WORK1_IMG, title: "В процессе расчистки", desc: "Очистили площадку от золы, гвоздей и остатков конструкций." },
-  { img: DEMO_WORK2_IMG, title: "Демонтаж конструкций", desc: "Разбор перекрытий и стен. Сортировка и складирование." },
-  { img: DEMO_WORK3_IMG, title: "Команда на объекте", desc: "Работаем быстро и аккуратно. Три дня — и площадка чистая." },
+const PORTFOLIO_CATS = [
+  {
+    id: "all",
+    label: "Все работы",
+    items: [
+      { img: MOWING_IMG, title: "Покос травы — 2025", desc: "Убираем заросли триммером. Быстро, аккуратно, без проплешин.", tag: "2025" },
+      { img: BYTOVKA_IMG, title: "Покраска бытовки", desc: "Полный цикл: очистка, грунт, покраска. Итог — как новая.", tag: "2025" },
+      { img: DEMO_BEFORE_IMG, title: "До демонтажа", desc: "Сгоревшая баня — брёвна, гарь, мусор. Так это выглядело в начале.", tag: "2025" },
+      { img: MOWING2_IMG, title: "Покос двора — 2025", desc: "Облагородили двор жилого дома. Триммер, уборка, порядок.", tag: "2025" },
+      { img: SAUNA_START_IMG, title: "Постройка бани — начало", desc: "Подготовка брёвен и закладка первых венцов.", tag: "2025" },
+      { img: DEMO_WORK1_IMG, title: "В процессе расчистки", desc: "Очистили площадку от золы, гвоздей и остатков конструкций.", tag: "2025" },
+    ],
+  },
+  {
+    id: "paint",
+    label: "Покраска",
+    items: [
+      { img: BYTOVKA_IMG, title: "Покраска бытовки", desc: "Полный цикл: очистка, грунт, покраска. Итог — как новая.", tag: "2025" },
+    ],
+  },
+  {
+    id: "mow",
+    label: "Покос",
+    items: [
+      { img: MOWING_IMG, title: "Покос травы — 2025", desc: "Убираем заросли триммером. Быстро, аккуратно, без проплешин.", tag: "2025" },
+      { img: MOWING2_IMG, title: "Покос двора — 2025", desc: "Облагородили двор жилого дома. Триммер, уборка, порядок.", tag: "2025" },
+      { img: MOWING3_IMG, title: "Расчистка участка — 2025", desc: "Заросший участок под дачу. До и после — небо и земля.", tag: "2025" },
+    ],
+  },
+  {
+    id: "demo",
+    label: "Демонтаж",
+    items: [
+      { img: DEMO_BEFORE_IMG, title: "До демонтажа", desc: "Сгоревшая баня — брёвна, гарь, мусор. Так это выглядело в начале.", tag: "2025" },
+      { img: DEMO_WORK1_IMG, title: "В процессе расчистки", desc: "Очистили площадку от золы, гвоздей и остатков конструкций.", tag: "2025" },
+      { img: DEMO_WORK2_IMG, title: "Демонтаж конструкций", desc: "Разбор перекрытий и стен. Сортировка и складирование.", tag: "2025" },
+      { img: DEMO_WORK3_IMG, title: "Команда на объекте", desc: "Работаем быстро и аккуратно. Три дня — и площадка чистая.", tag: "2025" },
+    ],
+  },
+  {
+    id: "build",
+    label: "Строительство",
+    items: [
+      { img: SAUNA_START_IMG, title: "Постройка бани — начало", desc: "Подготовка брёвен и закладка первых венцов. Июль 2025.", tag: "2025" },
+      { img: SAUNA_WALLS_IMG, title: "Постройка бани — стены", desc: "Сруб растёт — венцы уложены, углы подогнаны.", tag: "2025" },
+      { img: SAUNA_ROOF_IMG, title: "Постройка бани — крыша", desc: "Стропила, обрешётка, кровля. Баня уже под крышей.", tag: "2025" },
+    ],
+  },
 ];
 
 const REVIEWS = [
@@ -82,6 +119,9 @@ function StarRating({ count }: { count: number }) {
 }
 
 export default function Index() {
+  const [activeTab, setActiveTab] = useState("all");
+  const activeCat = PORTFOLIO_CATS.find(c => c.id === activeTab) || PORTFOLIO_CATS[0];
+
   return (
     <div className="bg-[#0f0f0f] text-white min-h-screen" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>
 
@@ -177,9 +217,22 @@ export default function Index() {
             </div>
             <h2 style={{ fontFamily: "'Oswald', sans-serif" }} className="text-4xl md:text-5xl font-bold uppercase tracking-tight">Портфолио</h2>
           </div>
+          {/* Вкладки-категории */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {PORTFOLIO_CATS.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveTab(cat.id)}
+                className={`px-5 py-2 text-xs uppercase tracking-widest border transition-colors ${activeTab === cat.id ? "bg-amber-400 text-black border-amber-400 font-bold" : "border-white/20 text-white/50 hover:border-amber-400 hover:text-amber-400"}`}
+                style={{ fontFamily: "'Oswald', sans-serif" }}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {PORTFOLIO.map((p, i) => (
-              <div key={p.title} className={`group overflow-hidden ${i === 0 ? "col-span-2 md:col-span-1" : ""}`}>
+            {activeCat.items.map((p) => (
+              <div key={p.title} className="group overflow-hidden">
                 <div className="relative overflow-hidden aspect-[4/3] mb-3">
                   <img
                     src={p.img}
