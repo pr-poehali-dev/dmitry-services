@@ -5,6 +5,7 @@ const inputCls = "w-full bg-[#141414] border border-white/15 text-white px-4 py-
 
 export default function OrderForm() {
   const [form, setForm] = useState({ name: "", phone: "", service: "", comment: "" });
+  const [agreed, setAgreed] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "err">("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,17 +109,29 @@ export default function OrderForm() {
           </p>
         </div>
       )}
+      <div className="md:col-span-2">
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <div
+            onClick={() => setAgreed(v => !v)}
+            className={`mt-0.5 w-4 h-4 flex-shrink-0 border transition-colors cursor-pointer flex items-center justify-center ${agreed ? "border-amber-400 bg-amber-400" : "border-white/20 group-hover:border-white/40"}`}
+          >
+            {agreed && <Icon name="Check" size={12} className="text-black" />}
+          </div>
+          <span className="text-xs text-white/40 leading-relaxed">
+            Отправляя заявку, я даю согласие на обработку персональных данных в соответствии с Федеральным законом №152-ФЗ «О персональных данных». Данные используются только для связи по заявке.
+          </span>
+        </label>
+      </div>
       <div className="md:col-span-2 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
         <button
           type="submit"
-          disabled={status === "sending"}
-          className="bg-amber-400 text-black font-semibold px-10 py-3.5 uppercase tracking-widest hover:bg-amber-300 transition-colors text-sm disabled:opacity-60"
+          disabled={status === "sending" || !agreed}
+          className="bg-amber-400 text-black font-semibold px-10 py-3.5 uppercase tracking-widest hover:bg-amber-300 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ fontFamily: "'Oswald', sans-serif" }}
         >
           {status === "sending" ? "Отправляю..." : "Отправить заявку"}
         </button>
         <p className="text-white/25 text-xs leading-relaxed">
-          Нажимая кнопку, вы соглашаетесь на обработку персональных данных.<br />
           Звоните напрямую: <a href="tel:89935039859" className="text-white/40 hover:text-amber-400 transition-colors">8 (993) 503-98-59</a>
         </p>
       </div>
