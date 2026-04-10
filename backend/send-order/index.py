@@ -1,11 +1,9 @@
 """
-Отправляет заявку с сайта на почту Дмитрия через Яндекс SMTP.
+Отправляет заявку с сайта в Telegram Дмитрию.
 """
 import json
 import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import urllib.request
 
 
 def handler(event: dict, context) -> dict:
@@ -25,68 +23,47 @@ def handler(event: dict, context) -> dict:
 
     name = body.get("name", "").strip()
     phone = body.get("phone", "").strip()
-    call_time = body.get("callTime", "").strip()
-    paint = body.get("paint", [])
-    paint_other = body.get("paintOther", "").strip()
-    mow = body.get("mow", [])
-    demo = body.get("demo", [])
-    demo_other = body.get("demoOther", "").strip()
-    other = body.get("other", [])
-    volume = body.get("volume", "").strip()
-    conditions = body.get("conditions", [])
+    service = body.get("volume", "").strip()
+    comment = body.get("comment", "").strip()
 
     if not name or not phone:
         return {"statusCode": 400, "headers": cors_headers, "body": json.dumps({"error": "name and phone required"})}
 
-    def fmt_list(items, extra=""):
-        lines = [f"  • {i}" for i in items]
-        if extra:
-            lines.append(f"  • Другое: {extra}")
-        return "\n".join(lines) if lines else "  —"
+    text = (
+        f"📋 *НОВАЯ ЗАЯВКА С САЙТА*\n"
+        f"{'─' * 30}\n"
+        f"👤 Имя: {name}\n"
+        f"📞 Телефон: {phone}\n"
+        f"🔧 Услуга: {service or '—'}\n"
+        f"💬 Комментарий: {comment or '—'}\n"
+        f"{'─' * 30}\n"
+        f"Ответить: {phone}"
+    )
 
-    text = f"""НОВАЯ ЗАЯВКА С САЙТА
-{'=' * 40}
+    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
 
-👤 Клиент: {name}
-📞 Телефон: {phone}
-🕐 Удобное время для звонка: {call_time or 'не указано'}
+    if not bot_token or not chat_id:
+        return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": "telegram not configured"})}
 
-{'=' * 40}
-ЧТО НУЖНО СДЕЛАТЬ:
+    payload = json.dumps({
+        "chat_id": chat_id,
+        "text": text,
+        "parse_mode": "Markdown"
+    }).encode("utf-8")
 
-🎨 Покраска:
-{fmt_list(paint, paint_other)}
-
-🌿 Покос и уборка:
-{fmt_list(mow)}
-
-🔨 Демонтаж:
-{fmt_list(demo, demo_other)}
-
-🔧 Прочее:
-{fmt_list(other)}
-
-{'=' * 40}
-📦 Объём работ: {volume or 'не указан'}
-
-✅ Условия на объекте:
-{fmt_list(conditions)}
-"""
-
-    smtp_password = os.environ.get("SMTP_PASSWORD", "")
-    sender = os.environ.get("SMTP_USER", "noreply@poehali.dev")
-    recipient = os.environ.get("ORDER_EMAIL", "")
-
-    msg = MIMEMultipart()
-    msg["Subject"] = f"Заявка с сайта — {name} ({phone})"
-    msg["From"] = sender
-    msg["To"] = recipient
-    msg.attach(MIMEText(text, "plain", "utf-8"))
+    req = urllib.request.Request(
+        f"https://api.telegram.org/bot{bot_token}/sendMessage",
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST"
+    )
 
     try:
-        with smtplib.SMTP_SSL("smtp.yandex.ru", 465) as server:
-            server.login(sender, smtp_password)
-            server.sendmail(sender, [recipient], msg.as_string())
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read())
+            if not result.get("ok"):
+                return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": "telegram error"})}
     except Exception as e:
         return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": str(e)})}
 
