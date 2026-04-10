@@ -1,9 +1,10 @@
 """
-Отправляет заявку с сайта в Telegram Дмитрию.
+Отправляет заявку с сайта через СМС на номер Дмитрия (sms.ru).
 """
 import json
 import os
 import urllib.request
+import urllib.parse
 
 
 def handler(event: dict, context) -> dict:
@@ -29,41 +30,31 @@ def handler(event: dict, context) -> dict:
     if not name or not phone:
         return {"statusCode": 400, "headers": cors_headers, "body": json.dumps({"error": "name and phone required"})}
 
-    text = (
-        f"📋 *НОВАЯ ЗАЯВКА С САЙТА*\n"
-        f"{'─' * 30}\n"
-        f"👤 Имя: {name}\n"
-        f"📞 Телефон: {phone}\n"
-        f"🔧 Услуга: {service or '—'}\n"
-        f"💬 Комментарий: {comment or '—'}\n"
-        f"{'─' * 30}\n"
-        f"Ответить: {phone}"
-    )
+    sms_text = f"Заявка: {name}, тел {phone}"
+    if service:
+        sms_text += f", {service}"
+    if comment:
+        sms_text += f". {comment}"
 
-    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+    api_key = os.environ.get("SMSRU_API_KEY", "")
+    to_phone = "89935039859"
 
-    if not bot_token or not chat_id:
-        return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": "telegram not configured"})}
+    params = urllib.parse.urlencode({
+        "api_id": api_key,
+        "to": to_phone,
+        "msg": sms_text,
+        "json": 1,
+    })
 
-    payload = json.dumps({
-        "chat_id": chat_id,
-        "text": text,
-        "parse_mode": "Markdown"
-    }).encode("utf-8")
-
-    req = urllib.request.Request(
-        f"https://api.telegram.org/bot{bot_token}/sendMessage",
-        data=payload,
-        headers={"Content-Type": "application/json"},
-        method="POST"
-    )
+    url = f"https://sms.ru/sms/send?{params}"
 
     try:
+        req = urllib.request.Request(url, method="GET")
         with urllib.request.urlopen(req, timeout=10) as resp:
             result = json.loads(resp.read())
-            if not result.get("ok"):
-                return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": "telegram error"})}
+            status = result.get("status")
+            if status != "OK":
+                return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": f"sms.ru: {status}", "detail": result})}
     except Exception as e:
         return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": str(e)})}
 
