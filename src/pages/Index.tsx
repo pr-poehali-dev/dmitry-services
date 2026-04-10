@@ -36,9 +36,13 @@ const SAUNA_START_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a90
 const SAUNA_WALLS_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/484071d7-bcd5-4e87-8e94-8d3ee6707562.png";
 const SAUNA_ROOF_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/0c4e0c16-f22e-4412-9957-ba5e95419a93.png";
 const MOWING_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/4581cdf5-1a33-48a6-84a3-b63b5a934d2f.png";
+const MOWING2_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/cb63b0b8-9dcf-4322-85f2-9724ab230938.png";
+const MOWING3_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/b9214817-e15f-46bb-a8e6-e35e5252cb53.png";
 
 const PORTFOLIO = [
   { img: MOWING_IMG, title: "Покос травы — 2025", desc: "Убираем заросли триммером. Быстро, аккуратно, без проплешин.", tag: "2025" },
+  { img: MOWING2_IMG, title: "Покос двора — 2025", desc: "Облагородили двор жилого дома. Триммер, уборка, порядок.", tag: "2025" },
+  { img: MOWING3_IMG, title: "Расчистка участка — 2025", desc: "Заросший участок под дачу. До и после — небо и земля.", tag: "2025" },
   { img: SAUNA_START_IMG, title: "Постройка бани — начало", desc: "Подготовка брёвен и закладка первых венцов. Июль 2025.", tag: "2025" },
   { img: SAUNA_WALLS_IMG, title: "Постройка бани — стены", desc: "Сруб растёт — венцы уложены, углы подогнаны.", tag: "2025" },
   { img: SAUNA_ROOF_IMG, title: "Постройка бани — крыша", desc: "Стропила, обрешётка, кровля. Баня уже под крышей.", tag: "2025" },
