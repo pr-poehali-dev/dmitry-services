@@ -38,6 +38,11 @@ const SAUNA_ROOF_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907
 const MOWING_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/4581cdf5-1a33-48a6-84a3-b63b5a934d2f.png";
 const MOWING2_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/cb63b0b8-9dcf-4322-85f2-9724ab230938.png";
 const MOWING3_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/b9214817-e15f-46bb-a8e6-e35e5252cb53.png";
+const NEW_DEMO1_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/b5ce144b-2baa-450b-898e-c1194e1160d4.jpg";
+const NEW_DEMO2_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/82f49593-b0da-4cad-9bbc-bbec7a610284.jpg";
+const NEW_PAINT1_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/696a95d7-8d6f-43ba-96bd-950e90589959.jpg";
+const NEW_PAINT2_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/b445f656-e33d-46dd-ae39-9346073ad19f.jpg";
+const NEW_STAIRS_IMG = "https://cdn.poehali.dev/projects/467970cf-6c76-4072-a907-c0e8abb07a3b/bucket/f75e03ed-727c-4980-81bd-eb5fdf1beadf.jpg";
 
 const PORTFOLIO_CATS = [
   {
@@ -50,6 +55,11 @@ const PORTFOLIO_CATS = [
       { img: MOWING2_IMG, title: "Покос двора — 2025", desc: "Облагородили двор жилого дома. Триммер, уборка, порядок.", tag: "2025" },
       { img: SAUNA_START_IMG, title: "Постройка бани — начало", desc: "Подготовка брёвен и закладка первых венцов.", tag: "2025" },
       { img: DEMO_WORK1_IMG, title: "В процессе расчистки", desc: "Очистили площадку от золы, гвоздей и остатков конструкций.", tag: "2025" },
+      { img: NEW_DEMO1_IMG, title: "Демонтаж в подъезде — 2025", desc: "Сверление и демонтажные работы в жилом доме. Перфоратор, пыль, результат.", tag: "2025" },
+      { img: NEW_DEMO2_IMG, title: "Демонтаж лестничного пролёта — 2025", desc: "Разбор конструкций на лестнице. Аккуратно, без повреждений соседних стен.", tag: "2025" },
+      { img: NEW_PAINT1_IMG, title: "Покраска стен — 2025", desc: "Грунтовка и нанесение краски на большую площадь. Ровно, без разводов.", tag: "2025" },
+      { img: NEW_PAINT2_IMG, title: "Покраска потолка — 2025", desc: "Покраска потолка и стен в помещении. Чистовая отделка под ключ.", tag: "2025" },
+      { img: NEW_STAIRS_IMG, title: "Отделка лестницы — 2025", desc: "Штукатурка и шпаклёвка стен на лестничном марше. Подготовка под покраску.", tag: "2025" },
     ],
   },
   {
@@ -57,6 +67,8 @@ const PORTFOLIO_CATS = [
     label: "Покраска",
     items: [
       { img: BYTOVKA_IMG, title: "Покраска бытовки", desc: "Полный цикл: очистка, грунт, покраска. Итог — как новая.", tag: "2025" },
+      { img: NEW_PAINT1_IMG, title: "Покраска стен — 2025", desc: "Грунтовка и нанесение краски на большую площадь. Ровно, без разводов.", tag: "2025" },
+      { img: NEW_PAINT2_IMG, title: "Покраска потолка — 2025", desc: "Покраска потолка и стен в помещении. Чистовая отделка под ключ.", tag: "2025" },
     ],
   },
   {
@@ -76,6 +88,9 @@ const PORTFOLIO_CATS = [
       { img: DEMO_WORK1_IMG, title: "В процессе расчистки", desc: "Очистили площадку от золы, гвоздей и остатков конструкций.", tag: "2025" },
       { img: DEMO_WORK2_IMG, title: "Демонтаж конструкций", desc: "Разбор перекрытий и стен. Сортировка и складирование.", tag: "2025" },
       { img: DEMO_WORK3_IMG, title: "Команда на объекте", desc: "Работаем быстро и аккуратно. Три дня — и площадка чистая.", tag: "2025" },
+      { img: NEW_DEMO1_IMG, title: "Демонтаж в подъезде — 2025", desc: "Сверление и демонтажные работы в жилом доме. Перфоратор, пыль, результат.", tag: "2025" },
+      { img: NEW_DEMO2_IMG, title: "Демонтаж лестничного пролёта — 2025", desc: "Разбор конструкций на лестнице. Аккуратно, без повреждений соседних стен.", tag: "2025" },
+      { img: NEW_STAIRS_IMG, title: "Отделка лестницы — 2025", desc: "Штукатурка и шпаклёвка стен на лестничном марше. Подготовка под покраску.", tag: "2025" },
     ],
   },
   {
